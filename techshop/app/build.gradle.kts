@@ -41,6 +41,12 @@ android {
 }
 
 dependencies {
+    // navigation-animation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.34.0") // có thể là bản mới hơn
+    //Accompanist Pager
+    implementation("com.google.accompanist:accompanist-pager:0.34.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.34.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +75,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth")
     implementation("io.coil-kt:coil-compose:2.2.2")
     //cloudinary
-    implementation ("com.cloudinary:cloudinary-android:2.3.1")
+    implementation("com.cloudinary:cloudinary-android:2.3.1")
     implementation("androidx.compose.material:material-icons-extended")
 }

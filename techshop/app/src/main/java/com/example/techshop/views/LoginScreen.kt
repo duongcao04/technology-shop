@@ -27,17 +27,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techshop.R
 import com.example.techshop.ui.theme.Gray50
-import com.example.techshop.ui.theme.Primary100
 import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.ui.theme.Raleway
 import com.example.techshop.utils.GoogleSignInUtils
