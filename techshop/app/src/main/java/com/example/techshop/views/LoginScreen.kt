@@ -1,5 +1,9 @@
 package com.example.techshop.views
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -22,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -32,9 +40,48 @@ import com.example.techshop.ui.theme.Gray50
 import com.example.techshop.ui.theme.Primary100
 import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.ui.theme.Raleway
+import com.example.techshop.utils.GoogleSignInUtils
+import com.example.techshop.viewmodels.AuthViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
+    // sư lý login
+    val context = LocalContext.current
+    val googleSignInClient = GoogleSignInUtils.getGoogleSignInClient(context)
+
+    val authState = viewModel.authState.collectAsState().value
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val idToken = account.idToken
+                if (idToken != null) {
+                    viewModel.loginWithGoogle(idToken)
+                }
+            } catch (e: Exception) {
+                Log.e("LoginScreen", "Google Sign-In failed", e)
+            }
+        }
+    }
+    // Theo dõi trạng thái đăng nhập để chuyển màn hình(nếu thành công chuyển qua home)
+    LaunchedEffect(authState) {
+        if (authState is AuthViewModel.AuthState.Success) {
+
+            navController.navigate("home") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
+    when (authState) {
+        is AuthViewModel.AuthState.Loading -> CircularProgressIndicator()
+        is AuthViewModel.AuthState.Error -> Text("Lỗi: ${(authState as AuthViewModel.AuthState.Error).message}")
+        else -> {}
+    }
     Box(
         modifier = Modifier
             .fillMaxSize(), // Ảnh phủ toàn màn hình
@@ -69,7 +116,9 @@ fun LoginScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(40.dp))
             Button(
-                onClick = { },
+                onClick = {   googleSignInClient.signOut().addOnCompleteListener {
+                    launcher.launch(googleSignInClient.signInIntent)
+                } },
                 modifier = Modifier
                     .height(61.dp)
                     .fillMaxWidth(),
