@@ -61,4 +61,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth")
+    implementation("io.coil-kt:coil-compose:2.2.2")
+    //cloudinary
+    implementation ("com.cloudinary:cloudinary-android:2.3.1")
 }

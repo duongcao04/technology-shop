@@ -12,7 +12,20 @@
           "package_name": "com.example.techshop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "538872690379-kd3t71cobmnl5r491lpl2kdaf9l0v48u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.techshop",
+            "certificate_hash": "db1c5b267efcf3b7f255ada86102d11e554e3b60"
+          }
+        },
+        {
+          "client_id": "538872690379-fae8r9uh9pi2k22kl4gqrft8iv99gh48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBC16WT45VZHYU1gDhKlSVq2VChEuzeHrk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538872690379-fae8r9uh9pi2k22kl4gqrft8iv99gh48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

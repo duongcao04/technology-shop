@@ -4,16 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.techshop.repositorys.AuthRepository
 import com.example.techshop.ui.theme.TechshopTheme
+import com.example.techshop.viewmodels.AuthViewModel
 import com.example.techshop.views.AppNavigation
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // ✅ Khởi tạo FirebaseAuth, GoogleSignInClient, Database
+        val auth = FirebaseAuth.getInstance()
+        val database = FirebaseDatabase.getInstance().reference
+
+        // ✅ Tạo repository và viewmodel
+        val authRepository = AuthRepository(auth, database)
+        val viewModel = AuthViewModel(authRepository)
         setContent {
             TechshopTheme {
-                AppNavigation()
+                AppNavigation(viewModel)
             }
         }
     }
