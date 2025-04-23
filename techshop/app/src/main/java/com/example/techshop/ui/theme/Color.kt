@@ -21,3 +21,5 @@ val Primary700 = Color(0xffbe123c)
 val Primary800 = Color(0xff9f1239)
 val Primary900 = Color(0xff881337)
 val Primary950 = Color(0xff4c0519)
+
+val Gray50 = Color(0xFFF8F8F8)

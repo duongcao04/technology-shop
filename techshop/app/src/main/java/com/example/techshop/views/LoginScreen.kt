@@ -20,12 +20,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techshop.R
+import com.example.techshop.ui.theme.Gray50
+import com.example.techshop.ui.theme.Primary100
 import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.ui.theme.Raleway
 
@@ -74,21 +78,46 @@ fun LoginScreen(navController: NavController) {
                     containerColor = Primary500
                 )
             ) {
-                Row(){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.icon_google_2),
                         contentDescription = "Google Logo",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                     Text(
-                        "Đăng nhập với Google", style = TextStyle(
+                        "Đăng nhập với Google",
+                        style = TextStyle(
                             fontSize = 19.sp,
                             fontWeight = FontWeight(500)
                         ),
-                        modifier = Modifier.padding(bottom = 10.dp),
+                        modifier = Modifier.padding(start = 10.dp),
                     )
                 }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = {
+                    navController.navigate("splash")
+                },
+                modifier = Modifier
+                    .height(61.dp)
+                    .fillMaxWidth(),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Gray50
+                )
+            ) {
+                Text(
+                    "Trở lại",
+                    style = TextStyle(
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color.Gray,
+                    ),
+                )
             }
             Spacer(modifier = Modifier.height(60.dp))
         }
