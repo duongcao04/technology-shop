@@ -1,7 +1,6 @@
 package com.example.techshop.repositorys
 
 import com.example.techshop.models.User
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.tasks.await

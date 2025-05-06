@@ -29,7 +29,7 @@ fun AppNavigation(authViewModel: AuthViewModel) {
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "splash",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })

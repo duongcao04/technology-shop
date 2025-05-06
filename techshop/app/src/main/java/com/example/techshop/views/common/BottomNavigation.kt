@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.techshop.ui.theme.Primary500
-
+// khai báo cho bottom
 data class BottomNavItem(
     val id: Int,
     val name: String,
@@ -58,16 +58,10 @@ data class BottomNavItem(
     val route: String
 )
 
-// Updated menu items to match the plant app in the image with better icon choices
+// các đối tượng tên icon và action khi nhân vào của từng đối tượng bottom
 val BOTTOM_MENUS = listOf(
     BottomNavItem(1, "Trang chủ", Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
-    BottomNavItem(
-        2,
-        "Sản phẩm",
-        Icons.Outlined.GridView,
-        activeIcon = Icons.Filled.GridView,
-        "product"
-    ),
+    BottomNavItem(2, "Sản phẩm", Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
     BottomNavItem(4, "Tôi", Icons.Outlined.Person, Icons.Filled.Person, "me")
 )
 
@@ -78,7 +72,7 @@ fun BottomNavigation(navController: NavController) {
     Surface(
         tonalElevation = 8.dp,
         modifier = Modifier
-            .height(132.dp)
+            .height(110.dp)
             .fillMaxWidth()
             .drawBehind {
                 val strokeWidth = 2.dp.toPx()
@@ -95,7 +89,7 @@ fun BottomNavigation(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp, 0.dp, 16.dp, 20.dp),
+                .padding(10.dp, 0.dp, 10.dp, 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
