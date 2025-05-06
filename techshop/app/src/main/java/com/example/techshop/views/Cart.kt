@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 
@@ -34,7 +35,7 @@ data class CartItem(
 )
 
 @Composable
-fun CartPage() {
+fun CartScreen(navController: NavController) {
     val fakeCartItems = listOf(
         CartItem(
             id = 1,

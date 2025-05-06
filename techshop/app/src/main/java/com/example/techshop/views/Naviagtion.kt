@@ -12,6 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.techshop.views.common.BottomNavigation
+import com.example.techshop.screens.login.CartScreen
+
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -29,7 +31,7 @@ fun AppNavigation(authViewModel: AuthViewModel) {
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "cart",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
@@ -55,6 +57,9 @@ fun AppNavigation(authViewModel: AuthViewModel) {
             composable("me") {
                 ProfileScreen(navController)
             }
+            composable("cart") {
+                CartScreen(navController)
+            }
         }
     }
 }
@@ -63,7 +68,7 @@ fun AppNavigation(authViewModel: AuthViewModel) {
 @Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "me" -> true
+        "home", "product", "me"-> true
         else -> false
     }
 }
