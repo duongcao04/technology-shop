@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.example.techshop.ui.screens.CustomerInfoScreen
 import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
@@ -57,6 +58,9 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 // Make sure we're passing the correct parameters to ProductsScreen
                 ProductsScreen(productViewModel, navController)
             }
+            composable("cart") {
+                CartScreen(navController)
+            }
             composable(
                 "productDetail/{productId}",
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
@@ -67,6 +71,9 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
             composable("me") {
                 ProfileScreen(navController,profileViewModel)
             }
+            composable("infoUser") {
+                CustomerInfoScreen(navController,profileViewModel)
+            }
         }
     }
 }
@@ -75,7 +82,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
 @Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "me" -> true
+        "home", "product","cart" ,"me" -> true
         else -> false
     }
 }
