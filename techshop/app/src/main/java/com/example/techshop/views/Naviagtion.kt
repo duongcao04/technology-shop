@@ -21,11 +21,7 @@ import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(
-    authViewModel: AuthViewModel,
-    productViewModel: ProductViewModel,
-    profileViewModel: ProfileViewModel
-) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -78,9 +74,6 @@ fun AppNavigation(
             composable("infoUser") {
                 CustomerInfoScreen(navController, profileViewModel)
             }
-            composable("infoUser") {
-                CustomerInfoScreen(navController, profileViewModel)
-            }
         }
     }
 }
@@ -89,7 +82,7 @@ fun AppNavigation(
 @Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "cart", "me" -> true
+        "home", "product","cart" ,"me" -> true
         else -> false
     }
 }

@@ -57,7 +57,6 @@ fun Topbar(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(35.dp)
-                    .padding(start = 8.dp)
                     .background(Color.White, shape = CircleShape),
                 textStyle = TextStyle(color = Color.Black, fontSize = 12.sp),
                 singleLine = true,
