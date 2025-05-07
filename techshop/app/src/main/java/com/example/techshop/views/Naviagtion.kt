@@ -1,6 +1,5 @@
 package com.example.techshop.views
 
-import ProductDetailScreen
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
@@ -14,12 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.example.techshop.models.Product
+import com.example.techshop.ui.screens.ProfileScreen
+import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -38,7 +39,6 @@ fun AppNavigation(authViewModel: AuthViewModel) {
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
                 slideInHorizontally { width -> width } + fadeIn()
-
             },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
             popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
@@ -54,24 +54,18 @@ fun AppNavigation(authViewModel: AuthViewModel) {
                 HomeScreen(navController)
             }
             composable("product") {
-                ProductsScreen(navController)
+                // Make sure we're passing the correct parameters to ProductsScreen
+                ProductsScreen(productViewModel, navController)
             }
             composable(
-                "detail"
-            ) {
-                val product = Product(
-                    id = "-Nd7xKz9f2hTt1aBcD12",
-                    name = "Laptop Lenovo Legion S7",
-                    description = "Laptop gaming cao cấp với hiệu năng mạnh mẽ.",
-                    price = 32000000,
-                    imageUrl = "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png",
-                    discountPercent = 10
-                    // createdAt và updatedAt sẽ tự động dùng giá trị mặc định từ data class
-                )
-                ProductDetailScreen(navController, product, { })
+                "productDetail/{productId}",
+                arguments = listOf(navArgument("productId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ProductDetailScreen(productViewModel, productId, navController)
             }
             composable("me") {
-                ProfileScreen(navController)
+                ProfileScreen(navController,profileViewModel)
             }
         }
     }

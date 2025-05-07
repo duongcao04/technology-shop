@@ -52,7 +52,6 @@ import com.example.techshop.ui.theme.Primary500
 // khai báo cho bottom
 data class BottomNavItem(
     val id: Int,
-    val name: String,
     val icon: ImageVector,
     val activeIcon: ImageVector,
     val route: String
@@ -60,9 +59,9 @@ data class BottomNavItem(
 
 // các đối tượng tên icon và action khi nhân vào của từng đối tượng bottom
 val BOTTOM_MENUS = listOf(
-    BottomNavItem(1, "Trang chủ", Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
-    BottomNavItem(2, "Sản phẩm", Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
-    BottomNavItem(4, "Tôi", Icons.Outlined.Person, Icons.Filled.Person, "me")
+    BottomNavItem(1,  Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
+    BottomNavItem(2,  Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
+    BottomNavItem(4,  Icons.Outlined.Person, Icons.Filled.Person, "me")
 )
 
 @Composable()
@@ -72,7 +71,7 @@ fun BottomNavigation(navController: NavController) {
     Surface(
         tonalElevation = 8.dp,
         modifier = Modifier
-            .height(110.dp)
+            .height(80.dp)
             .fillMaxWidth()
             .drawBehind {
                 val strokeWidth = 2.dp.toPx()
@@ -164,7 +163,7 @@ fun AnimatedNavItem(
                 indication = null,
                 onClick = onItemClick
             )
-            .padding(vertical = 18.dp)
+
     ) {
         Box(
             modifier = Modifier
@@ -180,24 +179,15 @@ fun AnimatedNavItem(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = item.name,
+                contentDescription = item.toString(),
                 tint = iconColor,
-                modifier = Modifier.size(iconSize)
+                modifier = Modifier.size(size = 30.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = item.name,
-            color = textColor,
-            fontSize = 11.sp,
-            fontWeight = fontWeight,
-            textAlign = TextAlign.Center,
-            letterSpacing = 0.2.sp,
-            maxLines = 1,
-            modifier = Modifier.scale(if (isSelected) 1.05f else 1f)
-        )
+
     }
 }
 

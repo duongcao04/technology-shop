@@ -1,7 +1,11 @@
+package com.example.techshop.views
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -12,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,23 +34,54 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.techshop.models.Product
+import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.views.ErrorMessage
 import com.example.techshop.ui.theme.AccentBlack
 import com.example.techshop.ui.theme.AccentWhite
 import com.example.techshop.ui.theme.Gray50
 import com.example.techshop.ui.theme.Primary500
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     navController: NavController,
     product: Product,
     onAddToCart: () -> Unit
+    viewModel: ProductViewModel,
+    productId: String,
+    navController: NavController
 ) {
     val mintGreen = Color(0xFF9ECECE)
     var isFavorite by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf(3) } // Starting with quantity 3 as shown in image
+    val selectedProduct by viewModel.selectedProduct.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    // Load product details when the screen is first displayed
+    LaunchedEffect(productId) {
+        viewModel.loadProductDetails(productId)
+    }
 
     Scaffold(
         topBar = { TopBar(navController) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Chi tiết sản phẩm") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Quay lại"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -109,6 +146,69 @@ fun ProductDetailScreen(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                error != null -> {
+                    ErrorMessage(message = error!!, modifier = Modifier.align(Alignment.Center))
+                }
+                selectedProduct != null -> {
+                    ProductDetailContent(product = selectedProduct!!)
+                }
+                else -> {
+                    Text(
+                        text = "Không tìm thấy sản phẩm",
+                        modifier = Modifier.align(Alignment.Center),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductDetailContent(product: Product) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        // Product Image
+        AsyncImage(
+            model = product.imageUrl,
+            contentDescription = product.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(240.dp),
+            contentScale = ContentScale.Fit,
+            error = androidx.compose.ui.res.painterResource(id = android.R.drawable.ic_menu_gallery)
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Product Name
+        Text(
+            text = product.name,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Price Information
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (product.discountPercent > 0) {
+                Text(
+                    text = product.getFormattedDiscountPrice(),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
 
                     // Product count information (42 gummies in the example)
                     Text(
@@ -117,6 +217,12 @@ fun ProductDetailScreen(
                         color = Color.Gray,
                         modifier = Modifier.padding(top = 4.dp)
                     )
+                Text(
+                    text = product.getFormattedPrice(),
+                    style = MaterialTheme.typography.titleMedium,
+                    textDecoration = TextDecoration.LineThrough,
+                    color = MaterialTheme.colorScheme.outline
+                )
 
                     // Price and quantity selector
                     Row(
@@ -154,11 +260,43 @@ fun ProductDetailScreen(
                     )
                 }
             }
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Surface(
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    shape = MaterialTheme.shapes.small
+                ) {
+                    Text(
+                        text = "-${product.discountPercent}%",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+            } else {
+                Text(
+                    text = product.getFormattedPrice(),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Description Section
+        Text(
+            text = "Mô tả sản phẩm",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
 
             FloatingBottomBar()
         }
     }
 }
+        Spacer(modifier = Modifier.height(8.dp))
 
 @Composable
 fun TopBar(navController: NavController) {
@@ -194,7 +332,12 @@ fun TopBar(navController: NavController) {
                 tint = Color.Black
             )
         }
+        Text(
+            text = product.description,
+            style = MaterialTheme.typography.bodyLarge
+        )
 
+        Spacer(modifier = Modifier.height(32.dp))
         Text("Detail", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
 
         // Favorite button
@@ -216,6 +359,22 @@ fun TopBar(navController: NavController) {
     }
 }
 
+        // Add to Cart Button
+        Button(
+            onClick = { /* Implement add to cart functionality */ },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            )
+        ) {
+            Text(
+                text = "Thêm vào giỏ hàng",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+    }
+}
 @Composable
 fun FloatingBottomBar() {
     Box(modifier = Modifier.fillMaxSize()) {
