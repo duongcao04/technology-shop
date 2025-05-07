@@ -1,5 +1,6 @@
 package com.example.techshop.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,14 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -90,7 +92,7 @@ fun ProductsScreen(viewModel: ProductViewModel, navController: NavController) {
                     )
                 }
                 else -> {
-                    ProductList(
+                    ProductGrid(
                         products = products,
                         onProductClick = { productId ->
                             // Navigate to product detail screen
@@ -104,22 +106,24 @@ fun ProductsScreen(viewModel: ProductViewModel, navController: NavController) {
 }
 
 @Composable
-fun ProductList(
+fun ProductGrid(
     products: List<Product>,
     onProductClick: (String) -> Unit
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(products) { product ->
-            ProductItem(product = product, onClick = { onProductClick(product.id) })
+            ProductCard(product = product, onClick = { onProductClick(product.id) })
         }
     }
 }
 
 @Composable
-fun ProductItem(
+fun ProductCard(
     product: Product,
     onClick: () -> Unit
 ) {
@@ -128,84 +132,74 @@ fun ProductItem(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Column {
             // Product Image
             AsyncImage(
                 model = product.imageUrl,
                 contentDescription = product.name,
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
                 contentScale = ContentScale.Crop,
                 error = androidx.compose.ui.res.painterResource(id = android.R.drawable.ic_menu_gallery)
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Product Info
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.padding(12.dp)
+            ) {
+                // Product Name
                 Text(
                     text = product.name,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = if (product.description.length > 50) "${product.description.take(50)}..." else product.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    if (product.discountPercent > 0) {
-                        Column {
-                            Text(
-                                text = product.getFormattedDiscountPrice(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                // Product Price
+                if (product.discountPercent > 0) {
+                    Text(
+                        text = product.getFormattedDiscountPrice(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
 
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = product.getFormattedPrice(),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    textDecoration = TextDecoration.LineThrough,
-                                    color = Color.Gray
-                                )
-
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                Text(
-                                    text = "-${product.discountPercent}%",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = Color.Red
-                                )
-                            }
-                        }
-                    } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = product.getFormattedPrice(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            style = MaterialTheme.typography.bodySmall,
+                            textDecoration = TextDecoration.LineThrough,
+                            color = Color.Gray
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Text(
+                            text = "-${product.discountPercent}%",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.Red,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color.Red.copy(alpha = 0.1f))
+                                .padding(horizontal = 4.dp, vertical = 2.dp)
                         )
                     }
+                } else {
+                    Text(
+                        text = product.getFormattedPrice(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
         }

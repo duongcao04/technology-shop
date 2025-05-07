@@ -13,12 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -63,7 +65,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 ProductDetailScreen(productViewModel, productId, navController)
             }
             composable("me") {
-                ProfileScreen(navController)
+                ProfileScreen(navController,profileViewModel)
             }
         }
     }
