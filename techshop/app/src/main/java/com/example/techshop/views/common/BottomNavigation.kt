@@ -22,9 +22,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,26 +51,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.techshop.ui.theme.Primary500
-
+// khai báo cho bottom
 data class BottomNavItem(
     val id: Int,
-    val name: String,
     val icon: ImageVector,
     val activeIcon: ImageVector,
     val route: String
 )
 
-// Updated menu items to match the plant app in the image with better icon choices
+// các đối tượng tên icon và action khi nhân vào của từng đối tượng bottom
 val BOTTOM_MENUS = listOf(
-    BottomNavItem(1, "Trang chủ", Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
-    BottomNavItem(
-        2,
-        "Sản phẩm",
-        Icons.Outlined.GridView,
-        activeIcon = Icons.Filled.GridView,
-        "product"
-    ),
-    BottomNavItem(4, "Tôi", Icons.Outlined.Person, Icons.Filled.Person, "me")
+    BottomNavItem(1, Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
+    BottomNavItem(2, Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
+    BottomNavItem(3, Icons.Outlined.ShoppingCart, activeIcon = Icons.Filled.ShoppingCart, "cart"),
+    BottomNavItem(4, Icons.Outlined.Person, Icons.Filled.Person, "me")
 )
 
 @Composable()
@@ -78,7 +74,7 @@ fun BottomNavigation(navController: NavController) {
     Surface(
         tonalElevation = 8.dp,
         modifier = Modifier
-            .height(132.dp)
+            .height(80.dp)
             .fillMaxWidth()
             .drawBehind {
                 val strokeWidth = 2.dp.toPx()
@@ -95,7 +91,7 @@ fun BottomNavigation(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp, 0.dp, 16.dp, 20.dp),
+                .padding(10.dp, 0.dp, 10.dp, 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -170,7 +166,7 @@ fun AnimatedNavItem(
                 indication = null,
                 onClick = onItemClick
             )
-            .padding(vertical = 18.dp)
+
     ) {
         Box(
             modifier = Modifier
@@ -186,24 +182,15 @@ fun AnimatedNavItem(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = item.name,
+                contentDescription = item.toString(),
                 tint = iconColor,
-                modifier = Modifier.size(iconSize)
+                modifier = Modifier.size(size = 30.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = item.name,
-            color = textColor,
-            fontSize = 11.sp,
-            fontWeight = fontWeight,
-            textAlign = TextAlign.Center,
-            letterSpacing = 0.2.sp,
-            maxLines = 1,
-            modifier = Modifier.scale(if (isSelected) 1.05f else 1f)
-        )
+
     }
 }
 

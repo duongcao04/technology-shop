@@ -10,14 +10,18 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import com.example.techshop.ui.screens.CustomerInfoScreen
+import com.example.techshop.ui.screens.ProfileScreen
+import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
-import com.example.techshop.screens.login.CartScreen
-
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -31,12 +35,11 @@ fun AppNavigation(authViewModel: AuthViewModel) {
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "cart",
+            startDestination = "splash",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
                 slideInHorizontally { width -> width } + fadeIn()
-
             },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
             popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
@@ -52,13 +55,24 @@ fun AppNavigation(authViewModel: AuthViewModel) {
                 HomeScreen(navController)
             }
             composable("product") {
-                ProductsScreen(navController)
-            }
-            composable("me") {
-                ProfileScreen(navController)
+                // Make sure we're passing the correct parameters to ProductsScreen
+                ProductsScreen(productViewModel, navController)
             }
             composable("cart") {
                 CartScreen(navController)
+            }
+            composable(
+                "productDetail/{productId}",
+                arguments = listOf(navArgument("productId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ProductDetailScreen(navController, productViewModel, productId, {})
+            }
+            composable("me") {
+                ProfileScreen(navController, profileViewModel)
+            }
+            composable("infoUser") {
+                CustomerInfoScreen(navController,profileViewModel)
             }
         }
     }
@@ -68,7 +82,7 @@ fun AppNavigation(authViewModel: AuthViewModel) {
 @Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "me"-> true
+        "home", "product","cart" ,"me" -> true
         else -> false
     }
 }

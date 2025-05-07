@@ -56,12 +56,13 @@ fun HeadingWithSearch(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(45.dp))
+                    .clip(RoundedCornerShape(30.dp))
                     .background(Color(0xFFF5F5F5))
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(50.dp)
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -93,17 +94,7 @@ fun HeadingWithSearch(
                         singleLine = true,
                     )
 
-                    IconButton(
-                        onClick = onCameraClick,
-                        modifier = Modifier.size(28.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.CameraAlt,
-                            contentDescription = "Camera",
-                            tint = Color(0xFF4285F4), // Google blue color
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
+
                 }
             }
         }

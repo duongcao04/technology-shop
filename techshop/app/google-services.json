@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "538872690379",
+    "firebase_url": "https://techshop-5108d-default-rtdb.firebaseio.com",
     "project_id": "techshop-5108d",
     "storage_bucket": "techshop-5108d.firebasestorage.app"
   },
@@ -19,6 +20,14 @@
           "android_info": {
             "package_name": "com.example.techshop",
             "certificate_hash": "db1c5b267efcf3b7f255ada86102d11e554e3b60"
+          }
+        },
+        {
+          "client_id": "538872690379-vacugfbsb0a894u2qoeqll3h8ss7oo5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.techshop",
+            "certificate_hash": "935a7ff898ff9532d82b3568aee3b2159e4ab4d6"
           }
         },
         {
