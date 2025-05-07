@@ -13,17 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.example.techshop.ui.screens.CustomerInfoScreen
+import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(
-    authViewModel: AuthViewModel,
-    productViewModel: ProductViewModel,
-    profileViewModel: ProfileViewModel
-) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -37,7 +35,7 @@ fun AppNavigation(
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "product",
+            startDestination = "splash",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
@@ -60,6 +58,9 @@ fun AppNavigation(
                 // Make sure we're passing the correct parameters to ProductsScreen
                 ProductsScreen(productViewModel, navController)
             }
+            composable("cart") {
+                CartScreen(navController)
+            }
             composable(
                 "productDetail/{productId}",
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
@@ -70,6 +71,9 @@ fun AppNavigation(
             composable("me") {
                 ProfileScreen(navController, profileViewModel)
             }
+            composable("infoUser") {
+                CustomerInfoScreen(navController,profileViewModel)
+            }
         }
     }
 }
@@ -78,7 +82,7 @@ fun AppNavigation(
 @Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "me" -> true
+        "home", "product","cart" ,"me" -> true
         else -> false
     }
 }

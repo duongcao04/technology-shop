@@ -78,7 +78,7 @@ fun Topbar(navController: NavController) {
                 Spacer(modifier = Modifier.width(10.dp))
 
                 IconButton(
-                    onClick = { navController.popBackStack() },
+                    onClick = { navController.navigate("cart") },
                     modifier = Modifier
                         .background(
                             color = Color(0xff716b6b).copy(alpha = 0.8f),

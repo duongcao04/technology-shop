@@ -22,9 +22,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -59,9 +61,10 @@ data class BottomNavItem(
 
 // các đối tượng tên icon và action khi nhân vào của từng đối tượng bottom
 val BOTTOM_MENUS = listOf(
-    BottomNavItem(1,  Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
-    BottomNavItem(2,  Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
-    BottomNavItem(4,  Icons.Outlined.Person, Icons.Filled.Person, "me")
+    BottomNavItem(1, Icons.Outlined.Home, activeIcon = Icons.Filled.Home, "home"),
+    BottomNavItem(2, Icons.Outlined.GridView, activeIcon = Icons.Filled.GridView, "product"),
+    BottomNavItem(3, Icons.Outlined.ShoppingCart, activeIcon = Icons.Filled.ShoppingCart, "cart"),
+    BottomNavItem(4, Icons.Outlined.Person, Icons.Filled.Person, "me")
 )
 
 @Composable()
