@@ -1,6 +1,8 @@
 package com.example.techshop
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,23 +20,34 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // ✅ Khởi tạo FirebaseAuth, GoogleSignInClient, Database
+
+        // Khởi tạo FirebaseAuth, GoogleSignInClient, Database
         val auth = FirebaseAuth.getInstance()
         val database = FirebaseDatabase.getInstance().reference
-        // ✅ Tạo repository và viewmodel
+
+        // Tạo repository và viewmodel
         val authRepository = AuthRepository(auth, database)
         val viewModel = AuthViewModel(authRepository)
-        // ✅ Khởi tạo ProductRepository và ProductViewModel
+
+        // Khởi tạo ProductRepository và ProductViewModel
         val productRepository = ProductRepository(database)
         val productViewModel = ProductViewModel(productRepository)
-        // ✅ Khởi tạo ProductRepository và ProductViewModel
+
+        // Khởi tạo ProductRepository và ProductViewModel
         val profileRepository = AuthRepository(auth, database)
 
-       val profileViewModel = ProfileViewModel(profileRepository)
+        val profileViewModel = ProfileViewModel(profileRepository)
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = this.resources.getColor(R.color.primary100)
+        }
 
         setContent {
             TechshopTheme {
-                AppNavigation(viewModel,productViewModel,profileViewModel)
+                AppNavigation(viewModel, productViewModel, profileViewModel)
             }
         }
     }

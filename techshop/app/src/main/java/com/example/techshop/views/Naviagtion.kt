@@ -13,14 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
+fun AppNavigation(
+    authViewModel: AuthViewModel,
+    productViewModel: ProductViewModel,
+    profileViewModel: ProfileViewModel
+) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -34,7 +37,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "splash",
+            startDestination = "product",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
@@ -62,10 +65,10 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId") ?: ""
-                ProductDetailScreen(productViewModel, productId, navController)
+                ProductDetailScreen(navController, productViewModel, productId, {})
             }
             composable("me") {
-                ProfileScreen(navController,profileViewModel)
+                ProfileScreen(navController, profileViewModel)
             }
         }
     }

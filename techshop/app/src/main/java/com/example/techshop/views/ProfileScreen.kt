@@ -1,4 +1,4 @@
-package com.example.techshop.ui.screens
+package com.example.techshop.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -58,6 +58,7 @@ fun ProfileScreen(
                 CircularProgressIndicator()
             }
         }
+
         is ProfileViewModel.UserState.Success -> {
             val user = state.user
 
@@ -215,6 +216,7 @@ fun ProfileScreen(
                 }
             }
         }
+
         is ProfileViewModel.UserState.Error -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -232,6 +234,7 @@ fun ProfileScreen(
                 }
             }
         }
+
         is ProfileViewModel.UserState.SignedOut -> {
             // Trạng thái này sẽ được xử lý bởi LaunchedEffect ở trên
             Box(

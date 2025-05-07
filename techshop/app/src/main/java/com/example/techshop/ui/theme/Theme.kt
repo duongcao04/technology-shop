@@ -50,17 +50,14 @@ private val LightColorScheme = lightColorScheme(
 
 val AppTypography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = Raleway,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = Raleway,
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = Raleway,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp
     )
