@@ -66,10 +66,10 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId") ?: ""
-                ProductDetailScreen(productViewModel, productId, navController)
+                ProductDetailScreen(navController, productViewModel, productId, {})
             }
             composable("me") {
-                ProfileScreen(navController,profileViewModel)
+                ProfileScreen(navController, profileViewModel)
             }
             composable("infoUser") {
                 CustomerInfoScreen(navController,profileViewModel)

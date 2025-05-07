@@ -1,30 +1,57 @@
 package com.example.techshop.views
 
+import android.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.AddShoppingCart
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.zIndex
+import androidx.navigation.compose.rememberNavController
 import com.example.techshop.models.Product
 import com.example.techshop.viewmodels.ProductViewModel
-import com.example.techshop.views.ErrorMessage
+import com.example.techshop.ui.theme.AccentBlack
+import com.example.techshop.ui.theme.AccentWhite
+import com.example.techshop.ui.theme.Gray50
+import com.example.techshop.ui.theme.Primary500
+import com.example.techshop.ui.theme.Primary600
+import com.example.techshop.views.components.productDetail.FloatingBottombar
+import com.example.techshop.views.components.productDetail.Topbar
+import com.example.techshop.views.components.products.AccessseliingPrice
+import com.example.techshop.views.components.products.DiscountTag
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
+    navController: NavController,
     viewModel: ProductViewModel,
     productId: String,
-    navController: NavController
+    onAddToCart: () -> Unit
 ) {
     val selectedProduct by viewModel.selectedProduct.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -35,155 +62,144 @@ fun ProductDetailScreen(
         viewModel.loadProductDetails(productId)
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Chi tiết sản phẩm") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Quay lại"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            when {
-                isLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                error != null -> {
-                    ErrorMessage(message = error!!, modifier = Modifier.align(Alignment.Center))
-                }
-                selectedProduct != null -> {
-                    ProductDetailContent(product = selectedProduct!!)
-                }
-                else -> {
-                    Text(
-                        text = "Không tìm thấy sản phẩm",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ProductDetailContent(product: Product) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .background(Color.White)
     ) {
-        // Product Image
-        AsyncImage(
-            model = product.imageUrl,
-            contentDescription = product.name,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(240.dp),
-            contentScale = ContentScale.Fit,
-            error = androidx.compose.ui.res.painterResource(id = android.R.drawable.ic_menu_gallery)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Product Name
-        Text(
-            text = product.name,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Price Information
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (product.discountPercent > 0) {
-                Text(
-                    text = product.getFormattedDiscountPrice(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Text(
-                    text = product.getFormattedPrice(),
-                    style = MaterialTheme.typography.titleMedium,
-                    textDecoration = TextDecoration.LineThrough,
-                    color = MaterialTheme.colorScheme.outline
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Surface(
-                    color = MaterialTheme.colorScheme.errorContainer,
-                    shape = MaterialTheme.shapes.small
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Box {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .zIndex(1f)
                 ) {
-                    Text(
-                        text = "-${product.discountPercent}%",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
+                    Topbar(navController)
                 }
-            } else {
-                Text(
-                    text = product.getFormattedPrice(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                ) {
+                    // Product image
+                    selectedProduct?.imageUrl?.let {
+                        Image(
+                            painter = rememberAsyncImagePainter(it),
+                            contentDescription = selectedProduct?.name,
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center)
+                        )
+                    } ?: run {
+                        // Placeholder if no image is available
+                        Box(
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(240.dp)
+                                .align(Alignment.Center)
+                                .background(Color.LightGray)
+                        )
+                    }
+                }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Product title and details
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
+                Text(
+                    text = selectedProduct?.name ?: "Tên sản phẩm",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Product Price
+                if (selectedProduct?.discountPercent ?: 0 > 0) {  // Kiểm tra giảm giá
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        AccessseliingPrice(selectedProduct?.getFormattedDiscountPrice() ?: "0.0")
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Text(
+                            text = selectedProduct?.getFormattedPrice() ?: "0.0",
+                            style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Normal),
+                            textDecoration = TextDecoration.LineThrough,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        DiscountTag((selectedProduct?.discountPercent ?: "0").toString())
+                    }
+                } else {
+                    // Hiển thị giá nếu không có giảm giá
+                    AccessseliingPrice(selectedProduct?.getFormattedPrice() ?: "0.0")
+                }
+
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 8.dp),
+                    color = Color(0xffeeeffa),
+                    thickness = 2.dp
+                )
+
+                // Description Section
+                Text(
+                    text = "Mô tả sản phẩm",
+                    style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                )
+
+                Spacer(modifier = Modifier.height(7.dp))
+
+                when {
+                    isLoading -> {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
+
+                    error != null -> {
+                        Text(
+                            text = error ?: "Lỗi không xác định",
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Red
+                        )
+                    }
+
+                    selectedProduct == null -> {
+                        Text(
+                            text = "Không tìm thấy sản phẩm",
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+
+                    else -> {
+                        Text(
+                            text = selectedProduct?.description ?: "Không có mô tả",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+
+            // Add extra space at bottom to ensure floating bar doesn't cover content
+            Spacer(modifier = Modifier.height(80.dp))
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Description Section
-        Text(
-            text = "Mô tả sản phẩm",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = product.description,
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Add to Cart Button
-        Button(
-            onClick = { /* Implement add to cart functionality */ },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Text(
-                text = "Thêm vào giỏ hàng",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+        // Floating bottom bar
+        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+            FloatingBottombar(onAddToCart)
         }
     }
 }
