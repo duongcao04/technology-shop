@@ -72,7 +72,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 ProfileScreen(navController, profileViewModel)
             }
             composable("infoUser") {
-                CustomerInfoScreen(navController,profileViewModel)
+                CustomerInfoScreen(navController, profileViewModel)
             }
         }
     }
