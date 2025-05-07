@@ -1,5 +1,6 @@
 package com.example.techshop.views
 
+import ProductDetailScreen
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
@@ -10,7 +11,10 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import com.example.techshop.models.Product
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -51,6 +55,20 @@ fun AppNavigation(authViewModel: AuthViewModel) {
             }
             composable("product") {
                 ProductsScreen(navController)
+            }
+            composable(
+                "detail"
+            ) {
+                val product = Product(
+                    id = "-Nd7xKz9f2hTt1aBcD12",
+                    name = "Laptop Lenovo Legion S7",
+                    description = "Laptop gaming cao cấp với hiệu năng mạnh mẽ.",
+                    price = 32000000,
+                    imageUrl = "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png",
+                    discountPercent = 10
+                    // createdAt và updatedAt sẽ tự động dùng giá trị mặc định từ data class
+                )
+                ProductDetailScreen(navController, product, { })
             }
             composable("me") {
                 ProfileScreen(navController)
