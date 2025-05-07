@@ -44,11 +44,7 @@ fun Topbar(navController: NavController) {
                         shape = RoundedCornerShape(12.dp)
                     ),
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_arrow_back_ios_new_24),
-                    contentDescription = "Back",
-                    tint = Color.Black
-                )
+
             }
 
             BasicTextField(
