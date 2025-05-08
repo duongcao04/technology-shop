@@ -7,9 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.techshop.repositorys.AuthRepository
+import com.example.techshop.repositorys.CartRepository
 import com.example.techshop.repositorys.ProductRepository
 import com.example.techshop.ui.theme.TechshopTheme
 import com.example.techshop.viewmodels.AuthViewModel
+import com.example.techshop.viewmodels.CartViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.AppNavigation
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
         // Tạo repository và viewmodel
         val authRepository = AuthRepository(auth, database)
-        val viewModel = AuthViewModel(authRepository)
+        val viewModel = AuthViewModel(authRepository,CartViewModel())
 
         // Khởi tạo ProductRepository và ProductViewModel
         val productRepository = ProductRepository(database)
@@ -38,16 +40,14 @@ class MainActivity : ComponentActivity() {
 
         val profileViewModel = ProfileViewModel(profileRepository)
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            val window = this.window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = this.resources.getColor(R.color.primary100)
-        }
+// Khởi tạo ProductRepository và ProductViewModel
+        val cartRepository = CartRepository()
+
+        val cartViewmodel = CartViewModel()
 
         setContent {
             TechshopTheme {
-                AppNavigation(viewModel, productViewModel, profileViewModel)
+                AppNavigation(viewModel, productViewModel, profileViewModel,cartViewmodel)
             }
         }
     }

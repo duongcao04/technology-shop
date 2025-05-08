@@ -15,13 +15,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.techshop.ui.screens.CustomerInfoScreen
 import com.example.techshop.ui.screens.ProfileScreen
+import com.example.techshop.viewmodels.CartViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel,profileViewModel: ProfileViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel, profileViewModel: ProfileViewModel, cartViewModel: CartViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -29,7 +30,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
             val currentRoute =
                 navController.currentBackStackEntryAsState().value?.destination?.route
             if (shouldShowBottomBar(currentRoute)) {
-                BottomNavigation(navController = navController)
+                authViewModel.currentUserId?.let { BottomNavigation(navController = navController, cartViewModel = cartViewModel, userId = it) }
             }
         }
     ) { paddingValues ->
@@ -59,14 +60,21 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 ProductsScreen(productViewModel, navController)
             }
             composable("cart") {
-                CartScreen(navController)
+                val userId = authViewModel.currentUserId
+                if (userId != null) {
+                    CartScreen(navController,cartViewModel,userId)
+                }
+
             }
             composable(
                 "productDetail/{productId}",
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId") ?: ""
-                ProductDetailScreen(navController, productViewModel, productId, {})
+                val userId = authViewModel.currentUserId
+                if (userId != null) {
+                    ProductDetailScreen(navController, productViewModel,cartViewModel, productId,userId)
+                }
             }
             composable("me") {
                 ProfileScreen(navController, profileViewModel)

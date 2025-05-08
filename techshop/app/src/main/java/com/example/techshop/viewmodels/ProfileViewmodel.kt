@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.techshop.models.User
 import com.example.techshop.repositorys.AuthRepository
+import com.example.techshop.viewmodels.AuthViewModel.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,10 +39,18 @@ class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel()
             _userState.value = UserState.Error("User not authenticated")
         }
     }
+    // Đăng xuất
     fun signOut() {
-        authRepository.signOut()
-        _userState.value = UserState.SignedOut
+        viewModelScope.launch {
+            try {
+                authRepository.signOut()
+                _userState.value = UserState.SignedOut
+            } catch (e: Exception) {
+
+            }
+        }
     }
+
     // State for user data operations
     sealed class UserState {
         object Loading : UserState()

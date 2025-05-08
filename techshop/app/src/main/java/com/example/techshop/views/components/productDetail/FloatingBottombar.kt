@@ -46,7 +46,7 @@ fun FloatingBottombar(onAddToCart: () -> Unit) {
                     .fillMaxHeight()
                     .weight(0.5f)
                     .clip(RoundedCornerShape(10.dp)),
-                onClick = { onAddToCart() },
+                onClick = { onAddToCart() }, // Gọi callback khi nhấn nút
                 colors = ButtonDefaults.buttonColors(
                     containerColor = AccentBlack,
                 ),
@@ -63,7 +63,7 @@ fun FloatingBottombar(onAddToCart: () -> Unit) {
                     .weight(1f)
                     .padding(start = 5.dp)
                     .clip(RoundedCornerShape(10.dp)),
-                onClick = { onAddToCart },
+                onClick = { onAddToCart() }, // Gọi callback khi nhấn nút - Đã sửa lỗi không gọi hàm
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary500
                 ),
@@ -79,4 +79,3 @@ fun FloatingBottombar(onAddToCart: () -> Unit) {
         }
     }
 }
-
