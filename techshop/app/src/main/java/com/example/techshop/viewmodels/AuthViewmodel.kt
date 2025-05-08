@@ -1,5 +1,6 @@
 package com.example.techshop.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.techshop.repositorys.AuthRepository
@@ -39,12 +40,36 @@ class AuthViewModel(
             }
         }
     }
+    fun logout() {
+        viewModelScope.launch {
+            try {
+                Log.d("AuthViewModel", "Starting logout process")
 
+                // Update state to loading
+                _authState.value = AuthState.Loading
+
+                // Sign out from Firebase Auth
+                authRepository.signOut()
+                Log.d("AuthViewModel", "Firebase sign out complete")
+
+
+
+                // Update auth state to SignedOut
+                _authState.value = AuthState.SignedOut
+                Log.d("AuthViewModel", "Auth state updated to SignedOut")
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Logout failed: ${e.message}", e)
+                // Handle any potential errors
+                _authState.value = AuthState.Error("Logout failed: ${e.message}")
+            }
+        }
+    }
     // trạng thái login
     sealed class AuthState {
         object Idle : AuthState()
         object Loading : AuthState()
         object Success : AuthState()
+        object SignedOut : AuthState() // New state for successful logout
         data class Error(val message: String) : AuthState()
     }
 }

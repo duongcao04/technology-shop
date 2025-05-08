@@ -27,20 +27,22 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.techshop.viewmodels.ProfileViewModel
-import com.example.techshop.views.common.BottomNavigation
 import com.example.techshop.ui.theme.* // Import màu từ file theme của bạn
+import com.example.techshop.viewmodels.AuthViewModel
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewModel: ProfileViewModel
+    viewModel: ProfileViewModel,
+    authViewModel: AuthViewModel
 ) {
     val userState by viewModel.userState.collectAsStateWithLifecycle()
+    val authState by authViewModel.authState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    // Lắng nghe sự thay đổi của userState
-    LaunchedEffect(userState) {
-        if (userState is ProfileViewModel.UserState.SignedOut) {
+    // Lắng nghe sự thay đổi của authState để xử lý đăng xuất
+    LaunchedEffect(authState) {
+        if (authState is AuthViewModel.AuthState.SignedOut) {
             // Khi đăng xuất thành công, điều hướng về màn hình login
             navController.navigate("login") {
                 // Xóa tất cả các màn hình khỏi back stack để người dùng không thể quay lại
@@ -49,6 +51,8 @@ fun ProfileScreen(
         }
     }
 
+
+
     // Đảm bảo tải dữ liệu người dùng khi hiển thị màn hình
     LaunchedEffect(Unit) {
         viewModel.loadCurrentUser()
@@ -56,9 +60,7 @@ fun ProfileScreen(
 
     // Sử dụng màu nền cho toàn bộ màn hình
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-
+        modifier = Modifier.fillMaxSize()
     ) {
         when (val state = userState) {
             is ProfileViewModel.UserState.Loading -> {
@@ -153,7 +155,6 @@ fun ProfileScreen(
                             ProfileMenuItem(
                                 title = "Thông tin cá nhân",
                                 icon = Icons.Default.Person,
-
                                 onClick = {
                                     navController.navigate("infoUser")
                                 }
@@ -168,7 +169,6 @@ fun ProfileScreen(
                             ProfileMenuItem(
                                 title = "Lịch sử đơn hàng",
                                 icon = Icons.Default.History,
-
                                 onClick = { /* Xử lý click */ }
                             )
 
@@ -176,7 +176,6 @@ fun ProfileScreen(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 color = Rose300
                             )
-
 
                             ProfileMenuItem(
                                 title = "Trung tâm hổ trợ",
@@ -188,10 +187,12 @@ fun ProfileScreen(
                                     context.startActivity(intent)
                                 }
                             )
+
                             Divider(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 color = Rose300
                             )
+
                             ProfileMenuItem(
                                 title = "Trò chuyện với TechShop",
                                 icon = Icons.Default.Chat,
@@ -209,7 +210,10 @@ fun ProfileScreen(
 
                     // Đăng xuất button
                     Button(
-                        onClick = { viewModel.signOut() },
+                        onClick = {
+                            // Sử dụng AuthViewModel để đăng xuất thay vì ProfileViewModel
+                            authViewModel.logout()
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Rose600,
@@ -219,7 +223,7 @@ fun ProfileScreen(
                         Icon(
                             imageVector = Icons.Default.ExitToApp,
                             contentDescription = "Sign Out",
-                            tint = Color.White  // Nút đăng xuất giữ màu trắng
+                            tint = Color.White
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -240,7 +244,7 @@ fun ProfileScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = "Error: ${state.message}",
-                            color = Color.Black  // Thay đổi màu chữ thành đen
+                            color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(
@@ -286,7 +290,7 @@ fun ProfileMenuItem(
         Icon(
             imageVector = icon,
             contentDescription = title,
-            tint =Primary700 // Icon màu đen
+            tint = Primary700 // Icon màu đen
         )
 
         Spacer(modifier = Modifier.width(16.dp))

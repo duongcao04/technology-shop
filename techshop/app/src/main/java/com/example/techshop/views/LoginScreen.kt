@@ -100,14 +100,14 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
         ) {
             Text(
                 text = "Đăng nhập", color = Color.Black, style = TextStyle(
-                    fontSize = 52.sp,
+                    fontSize = 40.sp,
                     fontWeight = FontWeight(800)
                 ), fontFamily = Raleway
             )
             Text(
                 "Chào mừng quay trở lại!",
                 color = Color.Black, style = TextStyle(
-                    fontSize = 19.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight(400)
                 ), modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp), fontFamily = Raleway
             )
@@ -117,9 +117,9 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
                     launcher.launch(googleSignInClient.signInIntent)
                 } },
                 modifier = Modifier
-                    .height(61.dp)
+                    .height(48.dp)
                     .fillMaxWidth(),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary500
                 )
@@ -136,7 +136,7 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
                     Text(
                         "Đăng nhập với Google",
                         style = TextStyle(
-                            fontSize = 19.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight(500)
                         ),
                         modifier = Modifier.padding(start = 10.dp),
@@ -149,7 +149,7 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
                     navController.navigate("splash")
                 },
                 modifier = Modifier
-                    .height(61.dp)
+                    .height(40.dp)
                     .fillMaxWidth(),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -161,7 +161,7 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
                     style = TextStyle(
                         fontSize = 17.sp,
                         fontWeight = FontWeight(500),
-                        color = Color.Gray,
+                        color = Color.Black,
                     ),
                 )
             }

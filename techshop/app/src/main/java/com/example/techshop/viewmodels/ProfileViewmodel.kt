@@ -39,17 +39,17 @@ class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel()
             _userState.value = UserState.Error("User not authenticated")
         }
     }
-    // Đăng xuất
-    fun signOut() {
-        viewModelScope.launch {
-            try {
-                authRepository.signOut()
-                _userState.value = UserState.SignedOut
-            } catch (e: Exception) {
-
-            }
-        }
-    }
+//    // Đăng xuất
+//    fun signOut() {
+//        viewModelScope.launch {
+//            try {
+//                authRepository.signOut()
+//                _userState.value = UserState.SignedOut
+//            } catch (e: Exception) {
+//
+//            }
+//        }
+//    }
 
     // State for user data operations
     sealed class UserState {
