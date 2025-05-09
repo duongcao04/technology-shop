@@ -41,22 +41,7 @@ fun FloatingBottombar(onAddToCart: () -> Unit) {
                 .height(40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(0.5f)
-                    .clip(RoundedCornerShape(10.dp)),
-                onClick = { onAddToCart() }, // Gọi callback khi nhấn nút
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = AccentBlack,
-                ),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.AddShoppingCart,
-                    contentDescription = "Add cart",
-                    tint = Color.White
-                )
-            }
+
             Button(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -70,7 +55,7 @@ fun FloatingBottombar(onAddToCart: () -> Unit) {
             ) {
                 Text(
                     modifier = Modifier.padding(0.dp),
-                    text = "Mua ngay",
+                    text = "Thêm giỏ hàng ",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White

@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import com.example.techshop.models.Product
 import com.example.techshop.ui.theme.Primary100
 import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.views.components.home.AboutUsSection
 import com.example.techshop.views.components.products.Topbar
 import com.example.techshop.views.components.products.ProductCard
 
@@ -56,7 +57,10 @@ fun ProductsScreen(viewModel: ProductViewModel, navController: NavController) {
             .background(Primary100),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Topbar(navController)
+        Box(modifier = Modifier.padding(16.dp,16.dp,16.dp,0.dp)) {
+            Topbar(navController)
+        }
+
 
         Spacer(modifier = Modifier.height(4.dp))
 

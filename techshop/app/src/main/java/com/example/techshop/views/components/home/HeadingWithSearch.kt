@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.techshop.ui.theme.Primary500
+import com.example.techshop.views.components.products.Topbar
 
 @Composable
 fun HeadingWithSearch(navController: NavController) {
@@ -78,27 +79,8 @@ fun HeadingWithSearch(navController: NavController) {
                 }
             }
         }
+        Topbar(navController)
 
-        OutlinedTextField(
-            value = "",
-            onValueChange = { /* TODO */ },
-            placeholder = { Text("Tìm kiếm sản phẩm") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search"
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                focusedBorderColor = Primary500,
-                unfocusedBorderColor = Color.LightGray,
-                cursorColor = Primary500
-            ),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        )
+
     }
 }

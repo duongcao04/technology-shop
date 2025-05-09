@@ -7,7 +7,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,57 +26,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techshop.R
+import com.example.techshop.ui.theme.Primary500
 
 @Composable
 fun Topbar(navController: NavController) {
     var text by remember { mutableStateOf("") }
-
-    Box(
+    OutlinedTextField(
+        value = "",
+        onValueChange = { /* TODO */ },
+        placeholder = { Text("Tìm kiếm sản phẩm") },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search"
+            )
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            backgroundColor = Color.White,
+            focusedBorderColor = Primary500,
+            unfocusedBorderColor = Color.LightGray,
+            cursorColor = Primary500
+        ),
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
-            .padding(top = 4.dp, start = 8.dp, end = 8.dp)
-    ) {
-        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier
-                    .size(20.dp)
-                    .padding(0.dp)
-                    .background(
-                        color = Color.Transparent,
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-            ) {
-
-            }
-
-            BasicTextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(35.dp)
-                    .background(Color.White, shape = CircleShape),
-                textStyle = TextStyle(color = Color.Black, fontSize = 12.sp),
-                singleLine = true,
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        if (text.isEmpty()) {
-                            Text(
-                                text = "Tìm kiếm ...",
-                                style = TextStyle(color = Color.Gray, fontSize = 12.sp)
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
-        }
-    }
+            .height(56.dp)
+    )
 }
