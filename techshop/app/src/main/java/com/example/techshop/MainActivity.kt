@@ -7,9 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.techshop.repositorys.AuthRepository
+import com.example.techshop.repositorys.CartRepository
 import com.example.techshop.repositorys.ProductRepository
 import com.example.techshop.ui.theme.TechshopTheme
 import com.example.techshop.viewmodels.AuthViewModel
+import com.example.techshop.viewmodels.CartViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.AppNavigation
@@ -36,7 +38,11 @@ class MainActivity : ComponentActivity() {
         // Khởi tạo ProductRepository và ProductViewModel
         val profileRepository = AuthRepository(auth, database)
 
+
         val profileViewModel = ProfileViewModel(profileRepository)
+
+        val cartRepository = CartRepository(auth, database)
+        val cartViewModel = CartViewModel(cartRepository)
 
         if (Build.VERSION.SDK_INT >= 21) {
             val window = this.window
@@ -47,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TechshopTheme {
-                AppNavigation(viewModel, productViewModel, profileViewModel)
+                AppNavigation(viewModel, productViewModel, profileViewModel, cartViewModel)
             }
         }
     }
