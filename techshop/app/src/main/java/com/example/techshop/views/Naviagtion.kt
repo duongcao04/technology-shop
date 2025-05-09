@@ -2,11 +2,6 @@ package com.example.techshop.views
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
 import com.example.techshop.viewmodels.AuthViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -21,58 +16,28 @@ import androidx.navigation.navArgument
 import com.example.techshop.ui.screens.CustomerInfoScreen
 import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.CartViewModel
+import com.example.techshop.viewmodels.OrderViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(
-    authViewModel: AuthViewModel,
-    productViewModel: ProductViewModel,
-    profileViewModel: ProfileViewModel,
-    cartViewModel: CartViewModel
-) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel, profileViewModel: ProfileViewModel, cartViewModel: CartViewModel,orderViewModel: OrderViewModel) {
     val navController = rememberNavController()
-
-    // Lấy userId hiện tại từ Firebase Authentication
-    var userId by remember { mutableStateOf("") }
-
-    // Lắng nghe trạng thái đăng nhập và cập nhật userId
-    LaunchedEffect(Unit) {
-        val firebaseAuth = FirebaseAuth.getInstance()
-
-        // Lấy userId hiện tại (nếu đã đăng nhập)
-        firebaseAuth.currentUser?.let {
-            userId = it.uid
-        }
-
-        // Lắng nghe thay đổi trạng thái đăng nhập
-        val authStateListener = FirebaseAuth.AuthStateListener { auth ->
-            val user = auth.currentUser
-            userId = user?.uid ?: ""
-        }
-
-        // Đăng ký lắng nghe
-        firebaseAuth.addAuthStateListener(authStateListener)
-    }
-
     Scaffold(
         bottomBar = {
             // Chỉ hiển thị BottomNavigation khi ở các màn hình cần thiết
             val currentRoute =
                 navController.currentBackStackEntryAsState().value?.destination?.route
             if (shouldShowBottomBar(currentRoute)) {
-                BottomNavigation(navController = navController)
+                authViewModel.currentUserId?.let { BottomNavigation(navController = navController, cartViewModel = cartViewModel, userId = it) }
             }
         }
     ) { paddingValues ->
         AnimatedNavHost(
             navController = navController,
-            startDestination = "cart",
+            startDestination = "splash",
             modifier = Modifier.padding(paddingValues),
             enterTransition = {
                 slideInHorizontally(initialOffsetX = { it })
@@ -89,53 +54,55 @@ fun AppNavigation(
                 LoginScreen(authViewModel, navController)
             }
             composable("home") {
-                HomeScreen(navController)
+                HomeScreen(navController, productViewModel)
             }
             composable("product") {
+                // Make sure we're passing the correct parameters to ProductsScreen
                 ProductsScreen(productViewModel, navController)
             }
             composable("cart") {
-                // Sử dụng userId hiện tại từ Firebase
-                if (userId.isNotEmpty()) {
-                    // Nếu đã đăng nhập, hiển thị giỏ hàng của người dùng
-                    CartScreen(navController, cartViewModel, productViewModel, userId)
-                } else {
-                    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
-                    LaunchedEffect(Unit) {
-                        navController.navigate("login")
-                    }
+                val userId = authViewModel.currentUserId
+                if (userId != null) {
+                    CartScreen(navController,cartViewModel,userId)
                 }
+
             }
             composable(
                 "productDetail/{productId}",
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val productId = backStackEntry.arguments?.getString("productId") ?: ""
-                ProductDetailScreen(navController, productViewModel, productId) {
-                    // Callback khi thêm vào giỏ hàng, kiểm tra đăng nhập
-                    if (userId.isNotEmpty()) {
-                        // Đã đăng nhập, thêm vào giỏ hàng
-                        cartViewModel.addToCart(userId, productId, 1)
-                    } else {
-                        // Chưa đăng nhập, chuyển hướng đến trang đăng nhập
-                        navController.navigate("login")
-                    }
+                val userId = authViewModel.currentUserId
+                if (userId != null) {
+                    ProductDetailScreen(navController, productViewModel,cartViewModel, productId,userId)
                 }
             }
             composable("me") {
-                ProfileScreen(navController, profileViewModel)
+                ProfileScreen(navController, profileViewModel, authViewModel)
             }
             composable("infoUser") {
                 CustomerInfoScreen(navController, profileViewModel)
+            }
+            composable("success") {
+                OrderSuccessScreen(navController)
+            }
+
+            composable("checkout") {
+                authViewModel.currentUserId?.let { it1 ->
+                    CheckoutScreen(navController, cartViewModel, orderViewModel,
+                        it1
+                    )
+                }
             }
         }
     }
 }
 
 // Hàm kiểm tra xem có nên hiển thị BottomNavigation hay không
+@Composable
 private fun shouldShowBottomBar(currentRoute: String?): Boolean {
     return when (currentRoute) {
-        "home", "product", "cart", "me" -> true
+        "home", "product","cart" ,"me" -> true
         else -> false
     }
 }
