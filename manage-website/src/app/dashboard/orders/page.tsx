@@ -6,9 +6,9 @@ import { IconEye } from '@tabler/icons-react'
 import { Button, Select, Tag, Tooltip, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 
+import { firebaseService } from '@/lib/firebase/services'
 import { vndFormated } from '@/lib/utils'
 
-import { firebaseService } from '../../../lib/firebase/services'
 import { Order } from '../../api/orders/type'
 import CustomizeTable from '../components/CustomizeTable'
 import PageHeading from '../components/PageHeading'
@@ -24,7 +24,7 @@ export type FormProps = {
     initialValues: object
 }
 
-export const orderStatus = [
+export const orderStatus: { name: string; color: string }[] = [
     {
         name: 'Đang giao',
         color: 'yellow',
