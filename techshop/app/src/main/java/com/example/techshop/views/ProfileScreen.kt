@@ -164,13 +164,18 @@ fun ProfileScreen(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 color = Rose300
                             )
-
-                            // Lịch sử đơn hàng
+// Lịch sử đơn hàng
                             ProfileMenuItem(
                                 title = "Lịch sử đơn hàng",
                                 icon = Icons.Default.History,
-                                onClick = { /* Xử lý click */ }
+                                onClick = {
+                                    user?.uid?.let { userId ->
+                                        navController.navigate("order_history/$userId")
+                                    }
+                                }
                             )
+
+// Xóa phần ElevatedButton dưới vì đã chuyển logic lên trên
 
                             Divider(
                                 modifier = Modifier.padding(horizontal = 16.dp),

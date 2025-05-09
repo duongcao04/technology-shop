@@ -14,6 +14,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.techshop.ui.screens.CustomerInfoScreen
+import com.example.techshop.ui.screens.OrderDetailsScreen
+import com.example.techshop.ui.screens.OrderHistoryScreen
 import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.CartViewModel
 import com.example.techshop.viewmodels.OrderViewModel
@@ -86,7 +88,35 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
             composable("success") {
                 OrderSuccessScreen(navController)
             }
+            // Thêm định tuyến cho lịch sử đơn hàng
+            composable(
+                route = "order_history/{userId}",
+                arguments = listOf(
+                    navArgument("userId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                OrderHistoryScreen(
+                    navController = navController,
+                    orderViewModel = orderViewModel,
+                    userId = userId
+                )
+            }
 
+            // Thêm định tuyến cho chi tiết đơn hàng
+            composable(
+                route = "order_details/{orderId}",
+                arguments = listOf(
+                    navArgument("orderId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+                OrderDetailsScreen(
+                    navController = navController,
+                    orderViewModel = orderViewModel,
+                    orderId = orderId
+                )
+            }
             composable("checkout") {
                 authViewModel.currentUserId?.let { it1 ->
                     CheckoutScreen(navController, cartViewModel, orderViewModel,

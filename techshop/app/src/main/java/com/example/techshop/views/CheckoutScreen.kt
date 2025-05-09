@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.techshop.ui.screens.Rose600
+import com.example.techshop.ui.screens.Rose800
 import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.viewmodels.CartViewModel
 import com.example.techshop.viewmodels.OrderViewModel
@@ -83,28 +85,30 @@ fun CheckoutScreen(
 
     Scaffold(
         topBar = {
-            SmallTopAppBar(
-                title = {
-                    Text(
-                        text = "Thanh toán",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Quay lại"
+            Box(modifier = Modifier.height(70.dp)) { // Giảm từ mặc định 64.dp xuống còn 48.dp
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Đặt hàng",
+                            fontWeight = FontWeight.Bold
                         )
-                    }
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.White,
-                    titleContentColor = Color(0xFF7B1FA2)
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = Rose600
+                            )
+                        ) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Quay lại")
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+
+                        titleContentColor = Rose800
+                    )
                 )
-            )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
@@ -364,6 +368,39 @@ fun CheckoutScreen(
                                 ) {
                                     Text(
                                         text = "Tổng (${currentCart?.itemCount ?: 0} sản phẩm):",
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = currentCart?.getFormattedTotalAmount() ?: "0₫",
+                                        fontWeight = FontWeight.Bold,
+
+                                    )
+                                }
+                                // Tổng tiền
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "Phí vận chuyển:",
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = "0₫",
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                                // Tổng tiền
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "Tổng cộng:",
                                         fontWeight = FontWeight.Medium
                                     )
                                     Text(
