@@ -14,7 +14,11 @@ export default function ManageLayout({
             )}
         >
             <ManageSidebar />
-            {children}
+            <div className="flex flex-1">
+                <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:px-10 md:py-7 dark:border-neutral-700 dark:bg-neutral-900">
+                    {children}
+                </div>
+            </div>
         </div>
     )
 }

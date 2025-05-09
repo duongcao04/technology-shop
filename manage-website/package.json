@@ -14,13 +14,18 @@
     "@tabler/icons-react": "^3.31.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "antd": "^5.24.8",
+    "cloudinary": "^2.6.1",
     "clsx": "^2.1.1",
     "firebase": "^11.6.0",
+    "formik": "^2.4.6",
     "motion": "^12.8.2",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.2.0"
+    "recharts": "^2.15.3",
+    "tailwind-merge": "^3.2.0",
+    "yup": "^1.6.1",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

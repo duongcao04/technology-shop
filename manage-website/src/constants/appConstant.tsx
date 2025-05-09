@@ -1,37 +1,51 @@
 import {
     IconArrowLeft,
+    IconBrandCodesandbox,
     IconBrandTabler,
-    IconSettings,
-    IconUserBolt,
+    IconTruckDelivery,
+    IconUsers,
 } from '@tabler/icons-react'
 
-export const SIDEBAR_LINKS = [
+const BASE_DASHBOARD_URI = '/dashboard'
+export const sidebarLinks = [
     {
-        label: 'Dashboard',
-        href: '#',
+        label: 'Bảng điều khiển',
+        href: '/',
         icon: (
             <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
         ),
     },
     {
-        label: 'Profile',
-        href: '#',
+        label: 'Sản phẩm',
+        href: '/products',
         icon: (
-            <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+            <IconBrandCodesandbox className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
         ),
     },
     {
-        label: 'Settings',
-        href: '#',
+        label: 'Đơn đặt hàng',
+        href: '/orders',
         icon: (
-            <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+            <IconTruckDelivery className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
         ),
     },
     {
-        label: 'Logout',
+        label: 'Khách hàng',
+        href: '/customers',
+        icon: (
+            <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        ),
+    },
+    {
+        label: 'Đăng xuất',
         href: '#',
         icon: (
             <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
         ),
     },
 ]
+
+export const SIDEBAR_LINKS = sidebarLinks.map((item) => ({
+    ...item,
+    href: BASE_DASHBOARD_URI + item.href,
+}))
