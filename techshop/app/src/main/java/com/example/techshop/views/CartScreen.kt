@@ -107,7 +107,7 @@ fun CartScreen(
                 EmptyCartView(
                     modifier = Modifier.align(Alignment.Center),
                     onBrowseProducts = {
-                        navController.navigate("products") {
+                        navController.navigate("product") {
                             popUpTo("home")
                         }
                     }

@@ -23,9 +23,10 @@ import com.example.techshop.views.components.home.CategoryList
 import com.example.techshop.views.components.home.NewProduct
 
 import androidx.compose.foundation.lazy.LazyColumn
+import com.example.techshop.viewmodels.ProductViewModel
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController,productViewModel: ProductViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -56,12 +57,16 @@ fun HomeScreen(navController: NavController) {
             }
         }
 
+
         item {
             Box(modifier = Modifier.padding(start = 16.dp)) {
-                NewProduct()
+                NewProduct(
+                    title = "Sản phẩm đề xuất",
+                    viewModel = productViewModel,
+                    navController = navController
+                )
             }
         }
-
         item {
             Box(modifier = Modifier.padding(start = 16.dp)) {
                 BestsellerProductsCarousel()

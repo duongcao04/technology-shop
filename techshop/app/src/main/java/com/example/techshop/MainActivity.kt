@@ -6,12 +6,14 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.techshop.repositories.OrderRepository
 import com.example.techshop.repositorys.AuthRepository
 import com.example.techshop.repositorys.CartRepository
 import com.example.techshop.repositorys.ProductRepository
 import com.example.techshop.ui.theme.TechshopTheme
 import com.example.techshop.viewmodels.AuthViewModel
 import com.example.techshop.viewmodels.CartViewModel
+import com.example.techshop.viewmodels.OrderViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.AppNavigation
@@ -45,9 +47,12 @@ class MainActivity : ComponentActivity() {
 
         val cartViewmodel = CartViewModel()
 
+        val orderRepository=OrderRepository()
+        val orderViewModel=OrderViewModel()
+
         setContent {
             TechshopTheme {
-                AppNavigation(viewModel, productViewModel, profileViewModel,cartViewmodel)
+                AppNavigation(viewModel, productViewModel, profileViewModel,cartViewmodel,orderViewModel)
             }
         }
     }

@@ -16,13 +16,14 @@ import androidx.navigation.navArgument
 import com.example.techshop.ui.screens.CustomerInfoScreen
 import com.example.techshop.ui.screens.ProfileScreen
 import com.example.techshop.viewmodels.CartViewModel
+import com.example.techshop.viewmodels.OrderViewModel
 import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.viewmodels.ProfileViewModel
 import com.example.techshop.views.common.BottomNavigation
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel, profileViewModel: ProfileViewModel, cartViewModel: CartViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewModel, profileViewModel: ProfileViewModel, cartViewModel: CartViewModel,orderViewModel: OrderViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -53,7 +54,7 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
                 LoginScreen(authViewModel, navController)
             }
             composable("home") {
-                HomeScreen(navController)
+                HomeScreen(navController, productViewModel)
             }
             composable("product") {
                 // Make sure we're passing the correct parameters to ProductsScreen
@@ -81,6 +82,17 @@ fun AppNavigation(authViewModel: AuthViewModel, productViewModel: ProductViewMod
             }
             composable("infoUser") {
                 CustomerInfoScreen(navController, profileViewModel)
+            }
+            composable("success") {
+                OrderSuccessScreen(navController)
+            }
+
+            composable("checkout") {
+                authViewModel.currentUserId?.let { it1 ->
+                    CheckoutScreen(navController, cartViewModel, orderViewModel,
+                        it1
+                    )
+                }
             }
         }
     }

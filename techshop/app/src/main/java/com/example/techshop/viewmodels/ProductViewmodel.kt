@@ -24,6 +24,10 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
+    // StateFlow cho danh sách 5 sản phẩm ngẫu nhiên
+    private val _randomProducts = MutableStateFlow<List<Product>>(emptyList())
+    val randomProducts: StateFlow<List<Product>> = _randomProducts
+
     // Hàm tải tất cả sản phẩm
     fun loadAllProducts() {
         _isLoading.value = true
@@ -64,5 +68,28 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
                 _isLoading.value = false
             }
         )
+    }
+
+    // Hàm lấy sản phẩm ngẫu nhiên
+    fun loadRandomProducts(count: Int = 5) {
+        _isLoading.value = true
+        _error.value = null
+
+        try {
+            repository.getRandomProducts(
+                limit = count,
+                onSuccess = { productList ->
+                    _randomProducts.value = productList
+                    _isLoading.value = false
+                },
+                onError = { exception ->
+                    _error.value = "Lỗi khi tải sản phẩm ngẫu nhiên: ${exception.message}"
+                    _isLoading.value = false
+                }
+            )
+        } catch (e: Exception) {
+            _error.value = "Lỗi không xác định khi tải sản phẩm ngẫu nhiên: ${e.message}"
+            _isLoading.value = false
+        }
     }
 }
