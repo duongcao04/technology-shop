@@ -1,108 +1,104 @@
-package com.example.techshop.views.components
+package com.example.techshop.views.components.home
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CameraAlt
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.techshop.ui.theme.Primary500
 
 @Composable
-fun HeadingWithSearch(
-    onSearchClick: () -> Unit = {},
-    onCameraClick: () -> Unit = {}
-) {
-    var searchText by remember { mutableStateOf("") }
+fun HeadingWithSearch(navController: NavController) {
+    val context = LocalContext.current
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Search Field with Camera Icon
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color(0xFFF5F5F5))
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            Column {
+                Text(
+                    text = "TechShop",
+                    style = MaterialTheme.typography.h5.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+
+                Text(
+                    text = "Chào mừng bạn quay trở lại!",
+                    style = MaterialTheme.typography.subtitle2.copy(
+                        color = Color.White
+                    )
+                )
+            }
+
+            Row {
+                IconButton(
+                    onClick = {
+                        Toast.makeText(context, "Tính năng đang được cập nhật!", Toast.LENGTH_SHORT)
+                            .show()
+                    },
+                    modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "Tìm kiếm ...",
-                        tint = Color.Gray,
-                        modifier = Modifier
-                            .size(26.dp)
-                            .padding(start = 4.dp)
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = "Thông báo",
+                        tint = Color.White
                     )
+                }
 
-                    TextField(
-                        value = searchText,
-                        onValueChange = { searchText = it },
-                        placeholder = { Text("Tìm kiếm ...", color = Color.Gray, fontSize = 13.sp) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 2.dp, vertical = 0.dp),
-                        textStyle = TextStyle(fontSize = 14.sp),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                        ),
-                        singleLine = true,
+                IconButton(
+                    onClick = { navController.navigate("cart") },
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "Giỏ hàng",
+                        tint = Color.White
                     )
-
-
                 }
             }
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun HeadingWithSearchPreview() {
-    HeadingWithSearch()
+        OutlinedTextField(
+            value = "",
+            onValueChange = { /* TODO */ },
+            placeholder = { Text("Tìm kiếm sản phẩm") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search"
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                focusedBorderColor = Primary500,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Primary500
+            ),
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        )
+    }
 }

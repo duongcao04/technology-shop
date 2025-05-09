@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.techshop.ui.theme.Primary50
 import com.example.techshop.ui.theme.Primary500
-import com.example.techshop.views.components.HeadingWithSearch
 import com.example.techshop.views.components.home.Banner
 import com.example.techshop.views.components.home.BestsellerProductsCarousel
 import com.example.techshop.views.components.home.CategoryList
@@ -24,9 +23,13 @@ import com.example.techshop.views.components.home.NewProduct
 
 import androidx.compose.foundation.lazy.LazyColumn
 import com.example.techshop.viewmodels.ProductViewModel
+import com.example.techshop.views.components.home.AboutUsSection
+import com.example.techshop.views.components.home.HeadingWithSearch
+import com.example.techshop.views.components.home.NewsletterSection
+import com.example.techshop.views.components.home.PromotionsSection
 
 @Composable
-fun HomeScreen(navController: NavController,productViewModel: ProductViewModel) {
+fun HomeScreen(navController: NavController, productViewModel: ProductViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +48,7 @@ fun HomeScreen(navController: NavController,productViewModel: ProductViewModel) 
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
-                    HeadingWithSearch()
+                    HeadingWithSearch(navController)
                     Banner()
                 }
             }
@@ -65,6 +68,34 @@ fun HomeScreen(navController: NavController,productViewModel: ProductViewModel) 
                     viewModel = productViewModel,
                     navController = navController
                 )
+            }
+        }
+
+        item {
+            Box(modifier = Modifier.padding(start = 16.dp)) {
+                BestsellerProductsCarousel(
+                    viewModel = productViewModel,
+                    navController = navController
+                )
+            }
+        }
+
+        item {
+            Box(modifier = Modifier.padding(start = 16.dp)) {
+                PromotionsSection(navController)
+            }
+        }
+
+        // Trong HomeScreen
+        item {
+            Box(modifier = Modifier.padding(start = 16.dp)) {
+                AboutUsSection(navController)
+            }
+        }
+
+        item {
+            Box(modifier = Modifier.padding(start = 16.dp)) {
+                NewsletterSection()
             }
         }
 

@@ -76,10 +76,10 @@ fun NewProduct(
                 modifier = Modifier.clickable { onSeeAllClick() }
             ) {
                 Text(
-                    text = "Xem tất cả", 
+                    text = "Xem tất cả",
                     color = Color(0xFF4285F4),
                     fontSize = 14.sp,
-                    modifier = Modifier.clickable { "product" }
+                    modifier = Modifier.clickable { navController.navigate("product") }
                 )
             }
         }
@@ -113,26 +113,18 @@ fun NewProduct(
         }
         // Show products if available
         else if (randomProducts.isNotEmpty()) {
-            // Product cards
             LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(end = 16.dp)
             ) {
                 items(randomProducts) { product ->
-                    // Bọc ProductCard trong một Box có kích thước cố định và sử dụng clipToBounds
-                    Box(
-                        modifier = Modifier
-                            .width(170.dp) // Cố định chiều rộng cho mỗi item
-                            .clip(RoundedCornerShape(8.dp))
-                    ) {
-                        // Sử dụng ProductCard nguyên bản, nhưng trong một không gian giới hạn
-                        ProductCardWithCustomSize(
-                            product = product,
-                            onClick = {
-                                navController.navigate("product_detail/${product.id}")
-                            }
-                        )
-                    }
+                    ProductCard(
+                        product = product,
+                        onClick = {
+                            navController.navigate("productDetail/${product.id}")
+                        },
+                        isBestseller = false // Mặc định là không hiển thị tag "Bán chạy"
+                    )
                 }
             }
         }
