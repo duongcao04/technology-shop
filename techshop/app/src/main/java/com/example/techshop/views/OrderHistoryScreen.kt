@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techshop.models.Order
+import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.viewmodels.OrderViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,17 +49,30 @@ fun OrderHistoryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Lịch sử đơn hàng") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Quay lại"
+            Box(modifier = Modifier.height(70.dp)) { // Giảm từ mặc định 64.dp xuống còn 48.dp
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Lịch sử mua hàng",
+                            fontWeight = FontWeight.Bold
                         )
-                    }
-                }
-            )
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = Rose600
+                            )
+                        ) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Quay lại")
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+
+                        titleContentColor = Rose800
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -109,7 +123,8 @@ fun OrderItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Rose100)
     ) {
         Column(
             modifier = Modifier
@@ -152,7 +167,8 @@ fun OrderItem(
             Text(
                 text = "Tổng tiền: ${order.getFormattedTotalPrice()}",
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = Primary500
             )
         }
     }

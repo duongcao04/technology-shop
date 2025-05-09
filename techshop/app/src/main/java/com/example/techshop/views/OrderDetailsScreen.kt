@@ -28,6 +28,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.techshop.models.Order
 import com.example.techshop.models.OrderItem
+import com.example.techshop.ui.theme.Primary500
+import com.example.techshop.ui.theme.Primary700
 import com.example.techshop.viewmodels.OrderViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,17 +59,30 @@ fun OrderDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Chi tiết đơn hàng") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Quay lại"
+            Box(modifier = Modifier.height(70.dp)) { // Giảm từ mặc định 64.dp xuống còn 48.dp
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Chi tiết đơn hàng",
+                            fontWeight = FontWeight.Bold
                         )
-                    }
-                }
-            )
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = Rose600
+                            )
+                        ) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Quay lại")
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+
+                        titleContentColor = Rose800
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -134,6 +149,8 @@ fun OrderHeader(order: Order) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ,colors = CardDefaults.cardColors(containerColor = Rose100)
+
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -170,6 +187,7 @@ fun RecipientInfo(order: Order) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ,colors = CardDefaults.cardColors(containerColor = Rose100)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -187,7 +205,7 @@ fun RecipientInfo(order: Order) {
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Primary700
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = order.name)
@@ -200,7 +218,7 @@ fun RecipientInfo(order: Order) {
                 Icon(
                     imageVector = Icons.Default.Phone,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Primary700
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = order.phone)
@@ -213,7 +231,7 @@ fun RecipientInfo(order: Order) {
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = Primary700
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = order.address)
@@ -235,6 +253,7 @@ fun OrderProductItem(orderItem: OrderItem) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        ,colors = CardDefaults.cardColors(containerColor = Rose100)
     ) {
         Row(
             modifier = Modifier
@@ -292,6 +311,7 @@ fun PaymentSummary(order: Order) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ,colors = CardDefaults.cardColors(containerColor = Rose100)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -314,7 +334,16 @@ fun PaymentSummary(order: Order) {
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+            // Số lượng sản phẩm
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "Phí vận chuyển:")
+                Text(text = "0đ")
+            }
 
+            Spacer(modifier = Modifier.height(8.dp))
             // Tổng tiền
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -327,7 +356,8 @@ fun PaymentSummary(order: Order) {
                 Text(
                     text = order.getFormattedTotalPrice(),
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    fontSize = 16.sp,
+                    color = Primary500
                 )
             }
         }
