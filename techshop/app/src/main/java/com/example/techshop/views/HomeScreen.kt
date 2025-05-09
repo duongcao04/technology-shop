@@ -67,10 +67,6 @@ fun HomeScreen(navController: NavController,productViewModel: ProductViewModel) 
                 )
             }
         }
-        item {
-            Box(modifier = Modifier.padding(start = 16.dp)) {
-                BestsellerProductsCarousel()
-            }
-        }
+
     }
 }
