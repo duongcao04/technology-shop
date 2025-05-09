@@ -23,5 +23,5 @@ val Primary900 = Color(0xff881337)
 val Primary950 = Color(0xff4c0519)
 
 val Gray50 = Color(0xFFF8F8F8)
-val AccentWhite = Color(0xffd5d5d5)
+val AccentWhite = Color(0xffefefef)
 val AccentBlack = Color(0xff2b2c30)

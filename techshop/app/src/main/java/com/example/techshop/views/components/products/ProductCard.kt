@@ -38,21 +38,17 @@ import com.example.techshop.ui.theme.Primary400
 import com.example.techshop.ui.theme.Primary500
 import com.example.techshop.ui.theme.Primary800
 
+// ProductCard.kt (UI)
 @Composable
-fun ProductCard(
-    product: Product,
-    onClick: () -> Unit
-) {
+fun ProductCard(product: Product, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(0.dp)
     ) {
-        Column() {
+        Column {
             Box {
                 AsyncImage(
                     model = product.imageUrl,
@@ -65,12 +61,13 @@ fun ProductCard(
                     contentScale = ContentScale.Crop,
                     error = androidx.compose.ui.res.painterResource(id = android.R.drawable.ic_menu_gallery)
                 )
+
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(10.dp)
                 ) {
-                    DiscountTag("10")
+                    DiscountTag(product.discountPercent.toString())
                 }
             }
 
@@ -79,7 +76,7 @@ fun ProductCard(
             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                 Text(
                     text = product.name,
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -87,17 +84,15 @@ fun ProductCard(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Product Price
                 if (product.discountPercent > 0) {
-
-                    Column() {
+                    Column {
                         Text(
                             text = product.getFormattedPrice(),
-                            style = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Normal),
+                            fontSize = 11.sp,
                             textDecoration = TextDecoration.LineThrough,
                             color = Color.Gray
                         )
-                        AccessseliingPrice(product.getFormattedPrice())
+                        AccessseliingPrice(product.getFormattedDiscountPrice())
                     }
                 } else {
                     AccessseliingPrice(product.getFormattedPrice())
@@ -111,7 +106,8 @@ fun ProductCard(
 fun AccessseliingPrice(price: String) {
     Text(
         text = price,
-        style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.ExtraBold),
+        fontSize = 18.sp,
+        fontWeight = FontWeight.ExtraBold,
         color = Primary500
     )
 }
@@ -129,16 +125,18 @@ fun DiscountTag(discount: String) {
     )
 }
 
-@Composable
 @Preview
+@Composable
 fun ProductCardPreview() {
     ProductCard(
         product = Product(
             id = "1asdas",
-            name = "Asus Tuf gaming F15 Pro 12400HAsus Tuf gaming F15 Pro 12400H",
+            name = "Asus TUF Gaming F15 Pro 12400H",
             description = "Des",
-            price = 100000.00,
+            price = 15000000.0,
             imageUrl = "",
-            discountPercent = 10,
-        ), {})
+            discountPercent = 10
+        ),
+        onClick = {}
+    )
 }

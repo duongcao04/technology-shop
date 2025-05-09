@@ -56,7 +56,7 @@ fun CustomerInfoScreen(
 
     Scaffold(
         topBar = {
-            Box(modifier = Modifier.height(48.dp)) { // Giảm từ mặc định 64.dp xuống còn 48.dp
+            Box(modifier = Modifier.height(70.dp)) { // Giảm từ mặc định 64.dp xuống còn 48.dp
                 CenterAlignedTopAppBar(
                     title = {
                         Text(

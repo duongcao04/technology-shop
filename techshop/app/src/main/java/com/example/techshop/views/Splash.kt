@@ -95,6 +95,7 @@ fun Splash(navController: NavController) {
                     Text(
                         text = "Bắt đầu",
                         style = MaterialTheme.typography.labelLarge.copy(
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                     )

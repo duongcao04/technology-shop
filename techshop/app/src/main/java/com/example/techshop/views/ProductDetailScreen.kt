@@ -1,15 +1,9 @@
 package com.example.techshop.views
-
-import android.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,47 +15,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
-import androidx.navigation.compose.rememberNavController
-import com.example.techshop.models.Product
-import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.ui.theme.AccentBlack
-import com.example.techshop.ui.theme.AccentWhite
-import com.example.techshop.ui.theme.Gray50
 import com.example.techshop.ui.theme.Primary500
-import com.example.techshop.ui.theme.Primary600
+import com.example.techshop.viewmodels.CartViewModel
+import com.example.techshop.viewmodels.ProductViewModel
 import com.example.techshop.views.components.productDetail.FloatingBottombar
 import com.example.techshop.views.components.productDetail.Topbar
 import com.example.techshop.views.components.products.AccessseliingPrice
 import com.example.techshop.views.components.products.DiscountTag
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     navController: NavController,
     viewModel: ProductViewModel,
+    cartViewModel: CartViewModel,
     productId: String,
-    onAddToCart: () -> Unit
+    userId: String,
+
 ) {
     val selectedProduct by viewModel.selectedProduct.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
+    // Thông báo thêm giỏ hàng thành công
+    var showAddToCartSuccessDialog by remember { mutableStateOf(false) }
+
     // Load product details when the screen is first displayed
     LaunchedEffect(productId) {
         viewModel.loadProductDetails(productId)
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -199,7 +184,53 @@ fun ProductDetailScreen(
 
         // Floating bottom bar
         Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-            FloatingBottombar(onAddToCart)
+            FloatingBottombar(
+                onAddToCart = {
+                    selectedProduct?.let { product ->
+                        // Thêm sản phẩm vào giỏ hàng
+                        cartViewModel.addProductToCart(userId, product, 1)
+                        // Hiển thị thông báo thành công
+                        showAddToCartSuccessDialog = true
+                    }
+                }
+            )
         }
+
+
+        // Dialog thông báo thêm giỏ hàng thành công
+        if (showAddToCartSuccessDialog) {
+            AlertDialog(
+                onDismissRequest = { showAddToCartSuccessDialog = false },
+                title = { Text("Thành công") },
+                text = { Text("Đã thêm sản phẩm vào giỏ hàng") },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            showAddToCartSuccessDialog = false
+                            // Chuyển đến màn hình giỏ hàng nếu muốn
+                            // navController.navigate("cart")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary500)
+                    ) {
+                        Text("Đóng")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            showAddToCartSuccessDialog = false
+                            // Chuyển đến màn hình giỏ hàng
+                            navController.navigate("cart")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = AccentBlack)
+                    ) {
+                        Text("Đến giỏ hàng")
+                    }
+                }
+            )
+        }
+
+
+
     }
 }
