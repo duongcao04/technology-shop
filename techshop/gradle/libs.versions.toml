@@ -1,5 +1,7 @@
 [versions]
+activation = "1.1.1"
 agp = "8.7.3"
+javaxMail = "1.6.7"
 kotlin = "2.0.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -14,7 +16,9 @@ firebaseDatabaseKtx = "21.0.0"
 firebaseAuthKtx = "23.2.0"
 
 [libraries]
+activation = { module = "javax.activation:activation", version.ref = "activation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMail" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

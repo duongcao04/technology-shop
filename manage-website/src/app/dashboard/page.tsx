@@ -349,8 +349,8 @@ const Dashboard: React.FC = () => {
         <div>
             <Header
                 style={{
-                    background: '#171717',
-                    color: 'white',
+                    background: 'var(--background)',
+                    color: 'var(--foreground)',
                     padding: '0 16px',
                 }}
             >
@@ -363,7 +363,7 @@ const Dashboard: React.FC = () => {
                 >
                     <Title
                         level={3}
-                        style={{ margin: '16px 0', color: 'white' }}
+                        style={{ margin: '16px 0', color: 'var(--foreground)' }}
                     >
                         Thống kê
                     </Title>
@@ -388,7 +388,7 @@ const Dashboard: React.FC = () => {
             </Header>
             <Content
                 style={{
-                    background: '#171717',
+                    background: 'var(--background)',
                 }}
                 className="!h-[calc(100vh-118px)] !overflow-y-auto overflow-x-hidden no-scrollbar rounded-lg"
             >
@@ -404,7 +404,7 @@ const Dashboard: React.FC = () => {
                                 prefix={<DollarOutlined />}
                                 suffix="đ"
                                 formatter={(value) =>
-                                    `${new Intl.NumberFormat('vi-VN').format(Number(value))}`
+                                    `${new Intl.NumberFormat('vi-VN',{ maximumFractionDigits: 0 }).format(Number(value))}`
                                 }
                             />
                         </Card>
@@ -429,7 +429,7 @@ const Dashboard: React.FC = () => {
                                 prefix={<ArrowUpOutlined />}
                                 suffix="đ"
                                 formatter={(value) =>
-                                    `${new Intl.NumberFormat('vi-VN').format(Number(value))}`
+                                    `${new Intl.NumberFormat('vi-VN',{ maximumFractionDigits: 0 }).format(Number(value))}`
                                 }
                             />
                         </Card>

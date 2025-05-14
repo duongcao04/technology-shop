@@ -23,6 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Network security configuration -->
+        <meta-data
+            android:name="androidx.core.content.FileProvider"
+            android:resource="@xml/filepaths" />
     </application>
+
+    <!-- Quyền truy cập internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>
